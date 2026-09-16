@@ -81,7 +81,7 @@ __global__ void bst_cuda(void *tree_root, void *dev_start_node,
     tmp_mutex = &tmp_parent->mutex_node;
     expected = UM_MUTEX_UNLOCK;
 
-    exFlag = atomicCAS_system(reinterpret_cast<int *>(&tmp_mutex->count),
+    exFlag = atomicCAS_system(const_cast<int *>(reinterpret_cast<const volatile int *>(&tmp_mutex->count)),
                               expected, 1);
 
     // If Parent node lock is successful
@@ -110,7 +110,7 @@ __global__ void bst_cuda(void *tree_root, void *dev_start_node,
 
       expected = UM_MUTEX_LOCK;
 
-      atomicCAS_system(reinterpret_cast<int *>(&tmp_mutex->count), expected, 0);
+      atomicCAS_system(const_cast<int *>(reinterpret_cast<const volatile int *>(&tmp_mutex->count)), expected, 0);
     }
 
     __threadfence_system();
