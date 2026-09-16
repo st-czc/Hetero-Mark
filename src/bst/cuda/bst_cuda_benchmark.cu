@@ -122,9 +122,18 @@ void BstCudaBenchmark::Initialize() {
   cudaMallocManaged(&tree_buffer_, sizeof(Node) * total_nodes_);
   InitializeNodes(tree_buffer_, total_nodes_, seed_);
   root_ = MakeBinaryTree(init_tree_insert_, tree_buffer_);
+
+  // Snapshot the freshly built tree so each Run can restore a clean state.
+  cudaMallocManaged(&tree_backup_, sizeof(Node) * total_nodes_);
+  cudaMemcpy(tree_backup_, tree_buffer_, sizeof(Node) * total_nodes_,
+             cudaMemcpyDeviceToDevice);
 }
 
 void BstCudaBenchmark::Run() {
+  // Restore the tree to its clean initial state (synchronous copy).
+  cudaMemcpy(tree_buffer_, tree_backup_, sizeof(Node) * total_nodes_,
+             cudaMemcpyDeviceToDevice);
+
   dim3 block_size(64);
   dim3 grid_size((device_nodes_ + 64 - 1) / 64);
 
@@ -132,6 +141,7 @@ void BstCudaBenchmark::Run() {
   uint32_t device_start_node = init_tree_insert_ + host_nodes_;
 
   printf("Device start node is %d \n", device_start_node);
+  cpu_gpu_logger_->GPUOn();
   bst_cuda<<<grid_size, block_size>>>(
       reinterpret_cast<void *>(tree_buffer_),
       reinterpret_cast<void *>(tree_buffer_ + device_start_node),
@@ -144,6 +154,8 @@ void BstCudaBenchmark::Run() {
   }
 
   cudaDeviceSynchronize();
+  cpu_gpu_logger_->GPUOff();
+  cpu_gpu_logger_->Summarize();
   printf("Gpu done \n");
   uint32_t actual_nodes = CountNodes(tree_buffer_);
 
@@ -151,4 +163,7 @@ void BstCudaBenchmark::Run() {
   printf("Number of total nodes are %d \n", total_nodes_);
 }
 
-void BstCudaBenchmark::Cleanup() { BstBenchmark::Cleanup(); }
+void BstCudaBenchmark::Cleanup() {
+  cudaFree(tree_backup_);
+  BstBenchmark::Cleanup();
+}
