@@ -52,7 +52,7 @@ int KnnBenchmark::loadData(std::string file, std::vector<Record> *records,
                            std::vector<LatLong> *locations) {
   FILE *flist, *fp;
   int i = 0;
-  char dbname[64];
+  char dbname[1024];
   int recNum = 0;
 
   /**Main processing **/
