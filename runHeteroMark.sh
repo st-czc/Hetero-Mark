@@ -9,6 +9,7 @@ REPEAT=8
 VERIFY=""
 BS_CHUNK=""
 CASES=()
+WORK_DIR="Hetero-Mark"
 
 # Parse command-line arguments.
 while [ $# -gt 0 ]; do
@@ -41,9 +42,13 @@ while [ $# -gt 0 ]; do
       CASES+=("${2:?$1 requires a value}")
       shift 2
       ;;
+    -w)
+      WORK_DIR="${2:?-w requires a value}"
+      shift 2
+      ;;
     *)
       echo "Unknown argument: $1" >&2
-      echo "Usage: $0 [-p|--perf] [-d time|ksize] [--dry] [-r N] [-v] [--bs-chunk N] [-c CASE ...]" >&2
+      echo "Usage: $0 [-p|--perf] [-d time|ksize] [--dry] [-r N] [-v] [--bs-chunk N] [-c CASE ...] [-w DIR]" >&2
       exit 1
       ;;
   esac
@@ -52,11 +57,11 @@ done
 case "$MODE" in
   time)
     export POCL_DEBUG=timing
-    mkdir -p performance/Hetero-Mark
+    mkdir -p performance/"$WORK_DIR"
     ;;
   ksize)
     export POCL_DEBUG=general
-    mkdir -p performance/Hetero-Mark
+    mkdir -p performance/"$WORK_DIR"
     ;;
   dry|"") ;;
   *)
@@ -78,7 +83,7 @@ fi
 # Generate the knn dataset if missing, regardless of perf mode or CASES.
 if [ "$MODE" != "dry" ] && [ ! -f "$DATASET_PATH/knn/filelist.10000.txt" ]; then
   mkdir -p "$DATASET_PATH/knn"
-  cp Hetero-Mark/tools/gen_knn_data.sh "$DATASET_PATH/knn/"
+  cp "$WORK_DIR/tools/gen_knn_data.sh" "$DATASET_PATH/knn/"
   (
     cd "$DATASET_PATH/knn"
     bash gen_knn_data.sh 10000
@@ -91,7 +96,7 @@ if [ ${#CASES[@]} -eq 0 ]; then
 fi
 
 for TestCase in "${CASES[@]}"; do
-  EXE="Hetero-Mark/build/src/$TestCase/cuda/${TestCase}_cuda"
+  EXE="$WORK_DIR/build/src/$TestCase/cuda/${TestCase}_cuda"
   if [ ! -x "$EXE" ]; then
     echo "Warning: $EXE not found, skipping $TestCase"
     continue
@@ -142,9 +147,9 @@ for TestCase in "${CASES[@]}"; do
     printf '%q ' "$EXE" "${ARGS[@]}"
     echo
   elif [ "$MODE" = "time" ]; then
-    "$EXE" "${ARGS[@]}" 2> >(grep TIMING > "performance/Hetero-Mark/$TestCase.timing.txt")
+    "$EXE" "${ARGS[@]}" 2> >(grep TIMING > "performance/$WORK_DIR/$TestCase.timing.txt")
   elif [ "$MODE" = "ksize" ]; then
-    "$EXE" "${ARGS[@]}" 2> >(grep "Preparing kernel" > "performance/Hetero-Mark/$TestCase.ksize.txt")
+    "$EXE" "${ARGS[@]}" 2> >(grep "Preparing kernel" > "performance/$WORK_DIR/$TestCase.ksize.txt")
   else
     "$EXE" "${ARGS[@]}"
   fi
