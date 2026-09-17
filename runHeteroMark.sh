@@ -5,7 +5,7 @@ DATASET_PATH="dataset/hmark-data"
 
 MODE=""       # "" = normal run, "time", "ksize", or "dry"
 PERF=0
-REPEAT=8
+REPEAT=5
 VERIFY=""
 BS_CHUNK=""
 CASES=()
@@ -107,7 +107,7 @@ for TestCase in "${CASES[@]}"; do
     aes)    ARGS=(-i "$DATASET_PATH/aes/32MB.data" -k "$DATASET_PATH/aes/key.data") ;;
     be)     ARGS=(-i "$DATASET_PATH/be/1920x1080.mp4" -m 100) ;;
     bs)     ARGS=(-x 8388608 --chunk "${BS_CHUNK:-4096}") ;;
-    bst)    ARGS=() ;;
+    bst)    ARGS=(-n 2000000 -p 0) ;;
     ep)     ARGS=(-x 16384 -m 20) ;;  # reduced to 50% workload; original: -x 32768 -m 20
     fir)    ARGS=(-x 8192) ;;
     ga)     ARGS=(-i "$DATASET_PATH/ga/1048576_1024.data") ;;
@@ -125,7 +125,7 @@ for TestCase in "${CASES[@]}"; do
     aes)    ARGS=(-i "$DATASET_PATH/aes/1KB.data" -k "$DATASET_PATH/aes/key.data") ;;
     be)     ARGS=(-i "$DATASET_PATH/be/320x180.mp4" -m 100) ;;
     bs)     ARGS=(-x 131072 --chunk "${BS_CHUNK:-0}") ;;
-    bst)    ARGS=() ;;
+    bst)    ARGS=(-p 0) ;;
     ep)     ARGS=(-x 1024 -m 20) ;;
     fir)    ARGS=(-x 1024) ;;
     ga)     ARGS=(-i "$DATASET_PATH/ga/1024_64.data") ;;
