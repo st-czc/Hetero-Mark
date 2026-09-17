@@ -151,7 +151,11 @@ for TestCase in "${CASES[@]}"; do
   elif [ "$MODE" = "ksize" ]; then
     "$EXE" "${ARGS[@]}" 2> >(grep "Preparing kernel" > "performance/$WORK_DIR/$TestCase.ksize.txt")
   else
-    "$EXE" "${ARGS[@]}"
+    printf '%q ' "$EXE" "${ARGS[@]}"
+    echo
+    set +e
+    ( "$EXE" "${ARGS[@]}" )
+    set -e
   fi
   echo
 done
