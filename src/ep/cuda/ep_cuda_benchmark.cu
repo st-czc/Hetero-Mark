@@ -131,7 +131,7 @@ void EpCudaBenchmark::EvaluateGpu(std::vector<Creature> *island) {
   cudaMemcpy(d_island_, island->data(), population_ / 2 * sizeof(Creature),
              cudaMemcpyHostToDevice);
   dim3 block_size(64);
-  dim3 grid_size((population_ / 2 * +block_size.x - 1) / block_size.x);
+  dim3 grid_size((population_ / 2 + block_size.x - 1) / block_size.x);
   cpu_gpu_logger_->GPUOn();
   Evaluate_Kernel<<<grid_size, block_size>>>(d_island_, d_fitness_func_,
                                              population_ / 2, kNumVariables);
@@ -153,7 +153,7 @@ void EpCudaBenchmark::MutateGpu(std::vector<Creature> *island) {
   cudaMemcpy(d_island_, island->data(), population_ / 2 * sizeof(Creature),
              cudaMemcpyHostToDevice);
   dim3 block_size(64);
-  dim3 grid_size((population_ / 2 * +block_size.x - 1) / block_size.x);
+  dim3 grid_size((population_ / 2 + block_size.x - 1) / block_size.x);
   cpu_gpu_logger_->GPUOn();
   Mutate_Kernel<<<grid_size, block_size>>>(d_island_, population_ / 2,
                                            kNumVariables);

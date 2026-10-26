@@ -12,7 +12,7 @@ set( HEADER_FILES
 )
 
 set(CMAKE_SUPPRESS_REGENERATION TRUE)
-cmake_minimum_required( VERSION 2.6.0 )
+cmake_minimum_required( VERSION 3.21 )
 project( ${FOLDER_NAME} )
 
 ###############################################################

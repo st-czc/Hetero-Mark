@@ -42,6 +42,7 @@
 #define SRC_COMMON_COMMAND_LINE_OPTION_ARGUMENT_VALUE_H_
 
 #include <string>
+#include <stdexcept>
 
 class ArgumentValue {
  protected:

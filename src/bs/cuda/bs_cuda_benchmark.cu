@@ -178,7 +178,7 @@ void BsCudaBenchmark::Run() {
 }
 
 bool BsCudaBenchmark::IsGpuCompleted() {
-  cudaError_t ret = cudaStreamQuery(stream_);
+  cudaError_t ret = cudaStreamSynchronize(stream_);
   if (ret == cudaSuccess) {
     cpu_gpu_logger_->GPUOff();
     return true;

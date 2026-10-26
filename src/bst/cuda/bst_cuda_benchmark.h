@@ -50,5 +50,10 @@ class BstCudaBenchmark : public BstBenchmark {
   void Initialize() override;
   void Run() override;
   void Cleanup() override;
+
+ private:
+  // Managed-memory snapshot of the freshly built tree, used to restore the
+  // tree to a clean state before each Run so the benchmark is re-entrant.
+  Node *tree_backup_ = nullptr;
 };
 #endif  // SRC_BST_CUDA_BST_CUDA_BENCHMARK_H_

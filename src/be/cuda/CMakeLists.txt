@@ -1,7 +1,7 @@
 set(FOLDER_NAME be_cuda)
 set(SUBDIRECTORIES)
 set(SRC_FILES
-        main.cc
+        main.cu
         be_cuda_benchmark.cu
 )
 set(HEADER_FILES
