@@ -43,6 +43,9 @@
 #include <cstdlib>
 #include "src/kmeans/cuda/kmeans_cuda_benchmark.h"
 
+#ifdef HIPCPU_AOT
+__reqd_work_group_size(64, 1, 1)
+#endif
 __global__ void kmeans_swap_cuda(float *feature, float *feature_swap,
                                  int npoints, int nfeatures) {
   uint32_t tid = blockIdx.x * blockDim.x + threadIdx.x;
@@ -52,6 +55,9 @@ __global__ void kmeans_swap_cuda(float *feature, float *feature_swap,
     feature_swap[i * npoints + tid] = feature[tid * nfeatures + i];
 }
 
+#ifdef HIPCPU_AOT
+__reqd_work_group_size(64, 1, 1)
+#endif
 __global__ void kmeans_compute_cuda(float *feature, float *clusters,
                                     int *membership, int npoints, int nclusters,
                                     int nfeatures, int offset, int size) {

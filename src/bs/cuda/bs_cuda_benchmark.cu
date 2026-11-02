@@ -66,6 +66,9 @@ __device__ float Phi(float X) {
   return (X < 0) ? (1.0f - y) : y;
 }
 
+#ifdef HIPCPU_AOT
+__reqd_work_group_size(64, 1, 1)
+#endif
 __global__ void bs_cuda(float *rand_array, float *d_call_price_,
                         float *d_put_price_) {
   uint tid = blockIdx.x * blockDim.x + threadIdx.x;

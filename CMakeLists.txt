@@ -10,6 +10,7 @@ option(HMARK_BUILD_HIP "Build all Hetero-mark benchmarks for HIP" OFF)
 option(HMARK_BUILD_CUDA "Build all Hetero-mark benchmarks for CUDA" OFF)
 option(HMARK_BUILD_OPENCL20 "Build all Hetero-mark benchmarks for OpenCL2.0" OFF)
 option(HMARK_BUILD_OPENCL12 "Build all Hetero-mark benchmarks for OpenCL1.2" OFF)
+option(HMARK_HIPCPU_AOT "Enable HIPCPU AOT kernel annotations" OFF)
 
 if (${HMARK_BUILD_HIP})
     enable_language(HIP)
@@ -56,6 +57,10 @@ if (${ENABLE_TEST})
     add_dependencies(gtest_main googletest)
     include_directories(${source_dir}/include)
 endif ()
+
+if (HMARK_HIPCPU_AOT)
+    add_compile_definitions(HIPCPU_AOT)
+endif()
 
 add_subdirectory(src)
 

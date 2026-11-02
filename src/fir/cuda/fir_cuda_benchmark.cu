@@ -44,6 +44,9 @@
 #include <cstdlib>
 #include <cstring>
 
+#ifdef HIPCPU_AOT
+__reqd_work_group_size(64, 1, 1)
+#endif
 __global__ void fir_cuda(float *input, float *output, float *coeff,
                          float *history, uint32_t num_tap, uint32_t num_data) {
   uint32_t tid = blockIdx.x * blockDim.x + threadIdx.x;

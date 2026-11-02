@@ -42,6 +42,9 @@
 #include <cstring>
 #include "src/hist/cuda/hist_cuda_benchmark.h"
 
+#ifdef HIPCPU_AOT
+__reqd_work_group_size(64, 1, 1)
+#endif
 __global__ void Histogram(uint32_t *pixels, uint32_t *histogram,
                           uint32_t num_colors, uint32_t num_pixels) {
   int tid = blockIdx.x * blockDim.x + threadIdx.x;

@@ -53,6 +53,9 @@ void PrCudaBenchmark::Initialize() {
   cudaMalloc(&device_mtx_2, (num_nodes_) * sizeof(float));
 }
 
+#ifdef HIPCPU_AOT
+__reqd_work_group_size(64, 1, 1)
+#endif
 __global__ void pr_cuda(uint32_t *device_row_offsets,
                         uint32_t *device_column_numbers, float *device_values,
                         float *device_mtx_1, float *device_mtx_2) {

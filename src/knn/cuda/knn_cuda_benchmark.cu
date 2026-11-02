@@ -45,6 +45,9 @@
 #include "src/knn/cuda/knn_cuda_benchmark.h"
 #include "src/knn/cuda/knn_gpu_partitioner.h"
 
+#ifdef HIPCPU_AOT
+__reqd_work_group_size(256, 1, 1)
+#endif
 __global__ void knn_cuda(LatLong *latLong, float *d_distances,
                          int num_gpu_records, int num_records, float lat,
                          float lng, int *gpu_worklist, int *cpu_worklist) {

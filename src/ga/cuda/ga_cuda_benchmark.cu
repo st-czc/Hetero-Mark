@@ -45,6 +45,9 @@
 #include <thread>
 #include <vector>
 
+#ifdef HIPCPU_AOT
+__reqd_work_group_size(64, 1, 1)
+#endif
 __global__ void ga_cuda(char *device_target, char *device_query,
                         char *device_batch_result, uint32_t length,
                         int query_sequence_length, int coarse_match_length,
