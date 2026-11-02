@@ -14,4 +14,7 @@ if (${HMARK_BUILD_CUDA})
   add_executable(${FOLDER_NAME} ${HEADER_FILES} ${SRC_FILES})
   target_link_libraries(${FOLDER_NAME}
       ga time_measurement command_line_option benchmark)
+  if (HMARK_HIPCPU_VECZ_WIDTH_32)
+    target_compile_options(${FOLDER_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-hipcpu-vecz-width=32>)
+  endif ()
 endif ()
