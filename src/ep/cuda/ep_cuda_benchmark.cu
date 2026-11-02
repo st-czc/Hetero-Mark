@@ -111,7 +111,7 @@ void EpCudaBenchmark::NormalRun() {
 }
 
 #ifdef HIPCPU_AOT
-__reqd_work_group_size(64, 1, 1)
+__reqd_work_group_size__(64, 1, 1)
 #endif
 __global__ void Evaluate_Kernel(Creature *creatures, double *fitness_function,
                                 uint32_t count, uint32_t num_vars) {
@@ -144,7 +144,7 @@ void EpCudaBenchmark::EvaluateGpu(std::vector<Creature> *island) {
 }
 
 #ifdef HIPCPU_AOT
-__reqd_work_group_size(64, 1, 1)
+__reqd_work_group_size__(64, 1, 1)
 #endif
 __global__ void Mutate_Kernel(Creature *creatures, uint32_t count,
                               uint32_t num_vars) {

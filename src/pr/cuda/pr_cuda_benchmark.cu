@@ -54,7 +54,7 @@ void PrCudaBenchmark::Initialize() {
 }
 
 #ifdef HIPCPU_AOT
-__reqd_work_group_size(64, 1, 1)
+__reqd_work_group_size__(64, 1, 1)
 #endif
 __global__ void pr_cuda(uint32_t *device_row_offsets,
                         uint32_t *device_column_numbers, float *device_values,

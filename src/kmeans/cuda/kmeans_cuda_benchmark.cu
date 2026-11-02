@@ -44,7 +44,7 @@
 #include "src/kmeans/cuda/kmeans_cuda_benchmark.h"
 
 #ifdef HIPCPU_AOT
-__reqd_work_group_size(64, 1, 1)
+__reqd_work_group_size__(64, 1, 1)
 #endif
 __global__ void kmeans_swap_cuda(float *feature, float *feature_swap,
                                  int npoints, int nfeatures) {
@@ -56,7 +56,7 @@ __global__ void kmeans_swap_cuda(float *feature, float *feature_swap,
 }
 
 #ifdef HIPCPU_AOT
-__reqd_work_group_size(64, 1, 1)
+__reqd_work_group_size__(64, 1, 1)
 #endif
 __global__ void kmeans_compute_cuda(float *feature, float *clusters,
                                     int *membership, int npoints, int nclusters,

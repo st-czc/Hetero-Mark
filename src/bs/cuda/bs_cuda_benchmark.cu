@@ -67,7 +67,7 @@ __device__ float Phi(float X) {
 }
 
 #ifdef HIPCPU_AOT
-__reqd_work_group_size(64, 1, 1)
+__reqd_work_group_size__(64, 1, 1)
 #endif
 __global__ void bs_cuda(float *rand_array, float *d_call_price_,
                         float *d_put_price_) {

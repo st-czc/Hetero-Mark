@@ -143,7 +143,7 @@ __device__ void MixColumnsGpu(uint8_t *state) {
 }
 
 #ifdef HIPCPU_AOT
-__reqd_work_group_size(64, 1, 1)
+__reqd_work_group_size__(64, 1, 1)
 #endif
 __global__ void aes_cuda(uint8_t *input, uint32_t *expanded_key, uint8_t *s) {
   uint8_t state[16];

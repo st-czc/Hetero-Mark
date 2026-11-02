@@ -64,7 +64,7 @@ void BeCudaBenchmark::Run() {
 }
 
 #ifdef HIPCPU_AOT
-__reqd_work_group_size(64, 1, 1)
+__reqd_work_group_size__(64, 1, 1)
 #endif
 __global__ void BackgroundExtraction(uint8_t *frame, float *bg, uint8_t *fg,
                                      uint32_t width, uint32_t height,

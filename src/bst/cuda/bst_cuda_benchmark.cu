@@ -43,7 +43,7 @@
 #include "src/bst/cuda/bst_cuda_benchmark.h"
 
 #ifdef HIPCPU_AOT
-__reqd_work_group_size(64, 1, 1)
+__reqd_work_group_size__(64, 1, 1)
 #endif
 __global__ void bst_cuda(void *tree_root, void *dev_start_node,
                          uint32_t gpu_nodes) {
