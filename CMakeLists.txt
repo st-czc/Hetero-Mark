@@ -11,6 +11,8 @@ option(HMARK_BUILD_CUDA "Build all Hetero-mark benchmarks for CUDA" OFF)
 option(HMARK_BUILD_OPENCL20 "Build all Hetero-mark benchmarks for OpenCL2.0" OFF)
 option(HMARK_BUILD_OPENCL12 "Build all Hetero-mark benchmarks for OpenCL1.2" OFF)
 option(HMARK_HIPCPU_AOT "Enable HIPCPU AOT kernel annotations" OFF)
+option(HMARK_HIPCPU_VECZ_VECTOR_PREDICATION "Enable -hipcpu-vecz-vector-predication" OFF)
+option(HMARK_HIPCPU_VECZ_LINEARIZE_BOSCC "Enable -hipcpu-vecz-linearize-boscc" OFF)
 
 if (${HMARK_BUILD_HIP})
     enable_language(HIP)
@@ -60,6 +62,14 @@ endif ()
 
 if (HMARK_HIPCPU_AOT)
     add_compile_definitions(HIPCPU_AOT)
+endif()
+
+if (HMARK_HIPCPU_VECZ_VECTOR_PREDICATION)
+    add_compile_options($<$<COMPILE_LANGUAGE:CUDA>:-hipcpu-vecz-vector-predication>)
+endif()
+
+if (HMARK_HIPCPU_VECZ_LINEARIZE_BOSCC)
+    add_compile_options($<$<COMPILE_LANGUAGE:CUDA>:-hipcpu-vecz-linearize-boscc>)
 endif()
 
 add_subdirectory(src)
